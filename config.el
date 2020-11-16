@@ -38,10 +38,45 @@
 (setq org-log-done 'time)
 (setq org-log-done 'note)
 (setq org-agenda-include-diary t)
+(setq org-agenda-files (directory-files-recursively "~/org/" "\\.org$"))
 (setq org-hide-emphasis-markers t)
 
-(setq org-journal-dir "~/org/journal/")
-(setq org-journal-date-format "%A, %d %B %Y")
+(require 'org-agenda)
+(setq org-agenda-custom-commands
+ '(("w" "Work calendar and todo"
+    ((agenda "")
+     (tags-todo "work")))
+   ("h" "Personal calendar and todo"
+    ((agenda "")
+     (tags-todo "personal")))
+   )
+ )
+
+(setq org-roam-directory "~/org/roam/")
+
+(use-package! org-journal
+  :defer
+  :init
+  ;; org journal
+  (setq org-journal-dir "~/org/journal/")
+  (setq org-journal-file-type 'daily)
+  (setq org-journal-file-format "%Y%m%d.org")
+  (setq org-journal-date-format "%A, %B %d %Y")
+  :config
+  (setq org-journal-carryover-items "")
+  )
+(defun org-journal-file-header-func (time)
+  "Custom function to create journal header."
+  (concat
+    (pcase org-journal-file-type
+      (`daily "#+TITLE: Daily Journal\n#+STARTUP: showeverything\n#+#+FILETAGS: :personal:")
+      (`weekly "#+TITLE: Weekly Journal\n#+STARTUP: folded")
+      (`monthly "#+TITLE: Monthly Journal\n#+STARTUP: folded")
+      (`yearly "#+TITLE: Yearly Journal\n#+STARTUP: folded"))))
+
+(setq org-journal-file-header 'org-journal-file-header-func)
+
+
 (require 'org-journal)
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -69,6 +104,7 @@
   (lambda ()
      (setq flycheck-python-pylint-executable "/Users/jd/.pyenv/shims/pylint")
      (setq flycheck-pylintrc (substitute-in-file-name "$HOME/.pylintrc"))))
+
 (defun org-summary-todo (n-done n-not-done)
   "Switch entry to DONE when all subentries are done, to TODO otherwise."
   (let (org-log-done org-log-states)   ; turn off logging
@@ -79,3 +115,21 @@
 (use-package org-bullets
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(use-package company-org-roam
+  :ensure t
+  ;; You may want to pin in case the version from stable.melpa.org is not working
+  ; :pin melpa
+  :config
+  (push 'company-org-roam company-backends))
+
+(require 'workgroups2)
+(workgroups-mode 1)
+
+(use-package ledger-mode
+    :mode ("\\.dat\\'"
+           "\\.ledger\\'")
+    :custom (ledger-clear-whole-transactions t))
+
+(use-package flycheck-ledger :after ledger-mode)
+(setq ledger-reconcile-default-commodity "₹")
