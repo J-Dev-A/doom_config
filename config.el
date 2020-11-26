@@ -93,7 +93,7 @@
   "Custom function to create journal header."
   (concat
     (pcase org-journal-file-type
-      (`daily "#+TITLE: Daily Journal\n#+STARTUP: showeverything\n#+#+FILETAGS: :personal:\n")
+      (`daily "#+TITLE: Daily Journal\n#+STARTUP: showeverything\n\n#+FILETAGS: :personal:\n\n")
       (`weekly "#+TITLE: Weekly Journal\n#+STARTUP: folded")
       (`monthly "#+TITLE: Monthly Journal\n#+STARTUP: folded")
       (`yearly "#+TITLE: Yearly Journal\n#+STARTUP: folded"))))
