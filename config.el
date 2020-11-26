@@ -52,6 +52,30 @@
    )
  )
 
+(setq org-todo-keywords
+  '((sequence "TODO(t)"
+      "MAYBE(m)"
+      "IN-PROGRESS(i)"
+      "WAITING(w)"
+      "DELEGATED(p)"
+      "|"
+      "DONE(d)"
+      "DEFERRED(q)"
+      "DECLINED(x)"
+      "CANCELLED(c)")))
+
+  (setq org-todo-keyword-faces
+    '(
+      ("TODO" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("IN-PROGRESS" :background "orange" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("WAITING" :background "yellow" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("DEFERRED" :background "gold" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("DELEGATED" :background "gold" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("MAYBE" :background "gray" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
+      ("DONE" :background "forest green" :weight bold :box (:line-width 2 :style released-button))
+      ("DECLINED" :background "black" :foreground "red" :weight bold :box (:line-width 2 :style released-button))
+      ("CANCELLED" :background "lime green" :foreground "black" :weight bold :box (:line-width 2 :style released-button))))
+
 (setq org-roam-directory "~/org/roam/")
 
 (use-package! org-journal
